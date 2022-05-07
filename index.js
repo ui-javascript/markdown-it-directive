@@ -260,7 +260,7 @@ function inlineDirectiveRule(state, silent) {
 
   const max = state.posMax;
   let pos = state.pos;
-  if (src.charCodeAt(pos) !== 0x3A/* : */) return false;
+  if (src.charCodeAt(pos) !== 0x40/* @ */) return false;
   ++pos;
 
   const rst = parseDirective(state, src, pos, max, false);
@@ -316,8 +316,8 @@ function blockDirectiveRule(state, startLine, endLine, silent) {
   const max = state.eMarks[startLine];
   let pos = state.bMarks[startLine] + state.tShift[startLine];
   if (pos + 3 > max // eMark point to the char after LF and no possible of a two char line (::\n which is not valid)
-   || src.charCodeAt(pos) !== 0x3A/* : */
-   || src.charCodeAt(pos + 1) !== 0x3A/* : */
+   || src.charCodeAt(pos) !== 0x40/* @ */
+   || src.charCodeAt(pos + 1) !== 0x40/* @ */
   ) {
     return false
   }
@@ -325,10 +325,10 @@ function blockDirectiveRule(state, startLine, endLine, silent) {
 
   // detect if one line mode and skip to directive name
   let oneLine = false;
-  if (src.charCodeAt(pos) !== 0x3A/* : */) {
+  if (src.charCodeAt(pos) !== 0x40/* @ */) {
     oneLine = true;
   } else {
-    pos = state.skipChars(pos, 0x3A/* : */);
+    pos = state.skipChars(pos, 0x40/* @ */);
   }
   pos = skipBlanks(src, pos, max);
 
@@ -347,7 +347,7 @@ function blockDirectiveRule(state, startLine, endLine, silent) {
   //                     ~~~~~~~
   const contentTitleStart = pos;
   let posEnd = skipBlanksBack(src, max, pos);
-  let tmp = state.skipCharsBack(posEnd, 0x3A/* : */, pos);
+  let tmp = state.skipCharsBack(posEnd, 0x40/* @ */, pos);
   // :: name [](){}  next thing:
   //                 ~~~~~~~~~~~
   if (posEnd - tmp > 1) posEnd = tmp;
